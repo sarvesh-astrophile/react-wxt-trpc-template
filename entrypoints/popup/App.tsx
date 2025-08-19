@@ -2,6 +2,7 @@ import { useState } from 'react';
 import reactLogo from '@/assets/react.svg';
 import trpcLogo from '@/assets/trpc.svg';
 import wxtLogo from '/wxt.svg';
+import tailwindLogo from '@/assets/tailwindcss.svg';
 import { TrpcTest } from './_components/TrpcTest';
 
 function App() {
@@ -26,6 +27,9 @@ function App() {
           </a>
           <a href="https://trpc.io" target="_blank" rel="noreferrer" title="tRPC">
             <img src={trpcLogo} alt="tRPC" className="h-6 w-6 transition-transform hover:scale-105" />
+          </a>
+          <a href="https://tailwindcss.com" target="_blank" rel="noreferrer" title="Tailwind CSS">
+            <img src={tailwindLogo} alt="Tailwind CSS" className="h-6 w-6 transition-transform hover:scale-105" />
           </a>
         </div>
       </header>
@@ -56,6 +60,9 @@ function App() {
         <a className="text-blue-600 hover:underline" href="https://wxt.dev" target="_blank" rel="noreferrer">WXT</a>,
         {' '}
         <a className="text-blue-600 hover:underline" href="https://react.dev" target="_blank" rel="noreferrer">React</a>
+        ,
+        {' '}
+        <a className="text-blue-600 hover:underline" href="https://tailwindcss.com" target="_blank" rel="noreferrer">Tailwind CSS</a>
         {' '}and{' '}
         <a className="text-blue-600 hover:underline" href="https://trpc.io" target="_blank" rel="noreferrer">tRPC</a>.
       </footer>
