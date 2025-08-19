@@ -1,0 +1,340 @@
+---
+alwaysApply: true
+---
+You are an expert AI programming assistant focused on clear, readable TypeScript for React WXT Chrome Extensions.
+
+My stack: React 18 + WXT + TypeScript + tRPC + TailwindCSS + Shadcn + Biome + Bun
+
+Core conventions:
+- `src/types/` - TypeScript definitions
+- `src/trpc/routers/` - tRPC procedures  
+- `src/lib/` - Shared utilities & Chrome API wrappers
+- `src/components/` - Reusable React components
+- `entrypoints/popup/_components/` - Popup-specific components
+- Use tRPC for type-safe communication between extension components
+- Use Shadcn for UI components
+- Use Bun as package manager
+- Chrome extension manifest v3 best practices
+- Always validate inputs and handle async operations properly
+- Implement loading states and error boundaries
+- Keep code DRY and well-structured
+
+# Project Structure Guide
+
+## Overview
+This document outlines the efficient project structure for the React WXT Chrome Extension with TypeScript, tRPC, and modern web extension APIs.
+
+## Root Structure
+```
+simple-chrome-extension-wxt/
+├── .cursor/                    # Cursor IDE configuration
+├── .env.example               # Environment variables template
+├── .gitignore                # Git ignore rules
+├── .output/                  # WXT build output directory
+├── biome.jsonc               # Biome configuration for linting/formatting
+├── bun.lock                  # Bun lock file
+├── package.json              # Dependencies and scripts
+├── README.md                 # Project documentation
+├── tasks.md                  # Development tasks
+├── tsconfig.json             # TypeScript configuration
+├── wxt.config.ts             # WXT configuration
+├── assets/                   # Source assets (React SVGs, etc.)
+├── entrypoints/              # Extension entry points
+├── public/                   # Static assets for extension
+└── src/                      # Shared source code
+```
+
+## Entry Points Structure (`entrypoints/`)
+
+### Extension Entry Points
+WXT uses file-based routing for extension entry points:
+
+```
+entrypoints/
+├── background.ts             # Service worker/background script
+├── content.ts               # Content script for web page injection
+├── popup/                   # Extension popup UI
+│   ├── index.html          # Popup HTML entry
+│   ├── main.tsx            # Popup React app entry
+│   ├── App.tsx             # Main popup React component
+│   ├── App.css             # Popup-specific styles
+│   └── style.css           # Global popup styles
+└── options/                 # Extension options page (optional)
+    ├── index.html
+    ├── main.tsx
+    └── App.tsx
+```
+
+----
+## Source Code Structure (`src/`)
+
+### Shared Components & Utilities
+```
+src/
+├── components/              # Reusable React components
+│   ├── ui/                  # Generic UI components
+│   │   ├── Button.tsx
+│   │   ├── Input.tsx
+│   │   └── Card.tsx
+│   └── common/              # Extension-specific components
+│       ├── ExtensionIcon.tsx
+│       └── StatusIndicator.tsx
+├── hooks/                   # Custom React hooks
+│   ├── useStorage.ts        # Chrome storage hook
+│   ├── useTabs.ts          # Chrome tabs API hook
+│   └── useTrpc.ts          # tRPC client hook for extension
+├── lib/                     # Shared utilities and helpers
+│   ├── storage.ts           # Chrome storage utilities
+│   ├── messaging.ts         # Extension messaging system
+│   └── constants.ts         # Extension constants
+├── types/                   # TypeScript type definitions
+│   ├── chrome.d.ts        # Chrome extension API types
+│   ├── extension.ts       # Extension-specific types
+│   └── trpc.ts            # tRPC shared types
+└── styles/                  # Global styles
+    └── globals.css         # TailwindCSS imports
+```
+
+### tRPC Integration Structure
+```
+src/trpc/
+├── client.ts               # tRPC client setup for extension
+├── server.ts               # tRPC server types (if using popup as server)
+├── routers/                # tRPC procedure definitions
+│   ├── storage.ts         # Storage-related procedures
+│   ├── tabs.ts            # Browser tab procedures
+│   └── extension.ts       # Extension management procedures
+└── shared.ts              # Shared types between client/server
+```
+
+## Directory Conventions
+
+### `entrypoints/popup/`
+- **Purpose**: Extension popup interface (the UI when clicking extension icon)
+- **Naming**: kebab-case for files, PascalCase for React components
+- **Structure**: Standard React app structure with TypeScript
+
+### `entrypoints/content.ts`
+- **Purpose**: Content script that runs on web pages
+- **Functionality**: DOM manipulation, communication with background
+- **Naming**: camelCase for functions, PascalCase for classes
+
+### `entrypoints/background.ts`
+- **Purpose**: Service worker for extension lifecycle and background tasks
+- **Functionality**: Message handling, storage management, tab management
+- **Naming**: camelCase for functions, PascalCase for classes
+
+### `src/components/`
+- **Purpose**: Reusable React components shared across extension UI
+- **Structure**: Organized by feature/domain
+- **Naming**: PascalCase for components, camelCase for utilities
+
+### `public/`
+- **Purpose**: Static assets for extension (icons, manifest)
+- **Content**: Extension icons, manifest.json (generated by WXT)
+- **Structure**: Organized by asset type
+```
+public/
+├── icon/
+│   ├── 16.png
+│   ├── 32.png
+│   ├── 48.png
+│   ├── 96.png
+│   └── 128.png
+└── wxt.svg                  # WXT logo
+```
+
+## File Naming Conventions
+
+### TypeScript Files
+- **Components**: `PascalCase.tsx` (e.g., `PopupApp.tsx`)
+- **Hooks**: `camelCase.ts` (e.g., `useStorage.ts`)
+- **Entry Points**: `kebab-case.ts` (e.g., `background.ts`, `content.ts`)
+- **Utilities**: `camelCase.ts` (e.g., `storage.ts`)
+
+### Configuration Files
+- **JSON**: `kebab-case.json` (e.g., `biome.jsonc`)
+- **TS Config**: `camelCase.ts` (e.g., `wxt.config.ts`)
+
+## Module Organization
+
+### Feature-Based Structure
+Organize extension features into logical domains:
+
+```
+src/
+├── features/
+│   ├── bookmarks/           # Bookmark management
+│   ├── history/             # Browser history integration
+│   ├── tabs/                # Tab management
+│   └── settings/            # Extension settings
+```
+
+### Chrome Extension APIs
+Organize by Chrome extension APIs:
+
+```
+src/
+├── apis/
+│   ├── storage/             # Chrome storage API wrapper
+│   ├── tabs/               # Chrome tabs API wrapper
+│   ├── runtime/            # Chrome runtime API wrapper
+│   └── messaging/          # Extension messaging system
+```
+
+## Best Practices
+
+### Component Organization
+- Keep popup components in `entrypoints/popup/`
+- Share common components in `src/components/`
+- Use feature-based organization for complex features
+- Implement proper TypeScript types for all props
+
+### Extension Architecture
+- **Background Script**: Handle extension lifecycle, storage, cross-origin requests
+- **Content Script**: Interact with web pages, send messages to background
+- **Popup**: User interface for quick actions
+- **Options Page**: Extension settings (if needed)
+
+### tRPC Integration
+- Use tRPC for type-safe communication between extension components
+- Implement procedures for storage operations
+- Create shared types between popup and background scripts
+- Use React Query for data fetching in popup
+
+### Storage Management
+- Use Chrome storage API for persistent data
+- Implement proper type safety for storage operations
+- Use tRPC procedures for complex storage operations
+- Handle storage permissions properly
+
+### Message Passing
+- Implement proper message types for extension communication
+- Use tRPC for type-safe message passing
+- Handle async operations correctly
+- Implement error handling for all message types
+
+## Technology Stack Integration
+
+### WXT Framework
+- **Purpose**: Modern web extension development framework
+- **Features**: TypeScript support, HMR, build optimization
+- **Configuration**: `wxt.config.ts` for build settings
+
+### React Integration
+- **Purpose**: Modern UI development in extension popup
+- **Features**: Hooks, context, state management
+- **Structure**: Standard React patterns within extension constraints
+
+### tRPC Integration
+- **Purpose**: Type-safe API layer for extension communication
+- **Features**: End-to-end type safety, automatic inference
+- **Usage**: Between popup, content script, and background
+
+### TypeScript Configuration
+- **Purpose**: Full type safety across extension
+- **Features**: Chrome extension types, strict mode
+- **Configuration**: `tsconfig.json` with extension-specific types
+
+## Build Output Structure
+```
+.output/
+├── chrome-mv3/
+│   ├── manifest.json        # Generated extension manifest
+│   ├── popup.html          # Built popup
+│   ├── assets/             # Built assets
+│   └── icons/              # Copied icons
+└── [browser]-mv3/         # Other browser targets
+```
+
+## Development Workflow
+1. **Development**: `wxt` - Start development server with HMR
+2. **Build**: `wxt build` - Build extension for production
+3. **Preview**: `wxt preview` - Preview built extension
+4. **Zip**: `wxt zip` - Create extension package for store submission
+
+---
+alwaysApply: true
+---
+# Technology Stack Guide
+
+## Core Stack
+- **React 18**: UI library for popup/options
+- **TypeScript 5.x**: Type-safe development
+- **WXT**: Extension development framework
+- **tRPC**: Type-safe API layer
+- **TailwindCSS**: Utility-first styling
+- **Shadcn**: UI components
+- **Biome**: Linting/formatting
+- **Bun**: Package manager
+
+## Extension Architecture
+- **Manifest V3**: Modern Chrome extension format
+- **Background**: Service worker (`background.ts`)
+- **Content**: Page injection (`content.ts`)
+- **Popup**: React-based UI (`entrypoints/popup/`)
+
+## Key APIs
+- **Storage API**: `chrome.storage.local/sync`
+- **Tabs API**: Tab management
+- **Runtime API**: Message passing & lifecycle
+
+## Development Tools
+- **Vite**: Build system via WXT
+- **Vitest**: Unit testing
+- **React Query**: Data fetching & caching
+- **Environment**: `.env` files for configuration
+
+## Browser Targets
+- **Chrome 88+** (primary)
+- **Firefox 109+** (secondary)
+- **Safari 14+** (future)
+
+## Performance
+- **Bundle size**: <1MB target
+- **Memory**: Efficient service worker lifecycle
+- **Optimization**: Tree shaking, code splitting
+
+## Security
+- **CSP**: Strict content security policy
+- **Permissions**: Minimal required permissions
+- **Validation**: Input validation & sanitization
+
+## Deployment
+- **Chrome Web Store**: `wxt zip` packaging
+- **Firefox Add-ons**: Cross-browser validation
+
+----
+
+# Task Management Rules
+
+## 📋 Core Rules for tasks.md Maintenance
+
+### 1. **Status Updates**
+- Update task status in both detailed section AND summary table
+- Use: ✅ completed | 🔄 in-progress | ⭕ pending | ❌ blocked
+- Recalculate dashboard metrics after each change
+
+### 2. **Dashboard Maintenance**
+- **Progress Tracking**: Update percentages and visual progress bars
+- **Next Recommended Task**: Identify logical next task based on dependencies
+- **Quick Stats**: Keep task counts and assignment distribution current
+
+### 3. **Dependency Management**
+- When task completes: check dependent tasks and update status if unblocked
+- Verify no circular dependencies exist
+- Update "Tasks ready to work on" count after dependency changes
+
+### 4. **Quality Assurance**
+- Verify status consistency across all sections
+- Ensure mathematical accuracy in progress calculations
+- Validate dependency references are valid task IDs
+- Check next recommended task makes logical sense
+
+### 5. **Automation Protocol**
+Every task status change triggers:
+1. Update detailed section + summary table
+2. Recalculate dashboard metrics
+3. Check dependent tasks
+4. Update next recommended task
+5. Verify critical path accuracy
