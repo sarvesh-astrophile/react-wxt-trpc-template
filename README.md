@@ -111,9 +111,59 @@ const { mutate: updateStorage } = trpc.storage.update.useMutation();
 
 ## 🎨 Styling
 
-- **TailwindCSS** for utility-first styling
-- **Shadcn UI components** for pre-built, customizable components
-- **CSS Modules** supported for component-specific styles
+### TailwindCSS (v4) Setup & Usage
+
+This project uses TailwindCSS v4 with the official Vite plugin, already wired into WXT.
+
+- **Plugin configuration** (`wxt.config.ts`):
+
+```ts
+import { defineConfig } from 'wxt';
+import tailwindcss from '@tailwindcss/vite';
+
+export default defineConfig({
+  modules: ['@wxt-dev/module-react'],
+  vite: () => ({
+    plugins: [tailwindcss()],
+  }),
+});
+```
+
+- **Global stylesheet** (`src/styles/globals.css`):
+
+```css
+@import "tailwindcss";
+```
+
+- **Import globals in UI entrypoints** (popup example `entrypoints/popup/main.tsx`):
+
+```ts
+import '/src/styles/globals.css';
+```
+
+- **Using utilities in components**:
+
+```tsx
+export default function ButtonExample() {
+  return (
+    <button className="px-3 py-2 rounded-md bg-blue-600 text-white hover:bg-blue-700">
+      Click
+    </button>
+  );
+}
+```
+
+Notes for Tailwind v4:
+- No `tailwind.config.js` is required by default; the plugin handles configuration.
+- Content scanning configuration is not needed.
+- Use responsive and state variants (`sm:`, `md:`, `hover:`, `focus:`) as usual.
+- Dark mode: use `dark:` modifiers; to force dark mode in the popup, toggle the `dark` class on `document.documentElement`.
+
+### Shadcn UI
+
+- Shadcn components are styled with Tailwind utilities and work out of the box.
+- Prefer Tailwind utilities for layout/spacing; keep component-level overrides minimal in `entrypoints/popup/App.css`.
+- Refer to the Shadcn documentation for component usage and customization.
 
 ## 🧪 Testing
 

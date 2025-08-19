@@ -8,7 +8,7 @@ const t = initTRPC.create({
 
 export const extensionRouter = t.router({
 	ping: t.procedure.query(() => {
-		return 'pongiasdfasdfasdfasdf';
+		return 'pp';
 	}),
 	greet: t.procedure.input(z.object({ name: z.string().min(1) })).query(({ input }) => {
 		return `Hello, ${input.name}!`;
