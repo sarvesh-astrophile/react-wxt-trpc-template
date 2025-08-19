@@ -7,8 +7,8 @@ export default defineBackground(() => {
   createChromeHandler({
     router: appRouter,
     createContext: () => ({}),
-    onError: ({ error }) => {
-      console.error('tRPC error', error);
+    onError: (opts: { error: unknown }) => {
+      console.error('tRPC error', opts.error);
     },
   });
 });

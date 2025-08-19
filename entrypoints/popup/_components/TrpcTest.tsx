@@ -8,12 +8,16 @@ export function TrpcTest() {
 
 	useEffect(() => {
 		const client = createChromeTrpcClient();
-		client.ping.query()
-			.then((res) => setPing(res))
-			.catch((e) => setError(String(e)));
-		client.greet.query({ name: 'WXT' })
-			.then((res) => setGreet(res))
-			.catch((e) => setError(String(e)));
+		(async () => {
+			try {
+				const pongconst: string = await client.ping.query();
+				setPing(pongconst);
+				const greetingconst: string = await client.greet.query({ name: 'WXTasdfsai' });
+				setGreet(greetingconst);
+			} catch (e) {
+				setError(String(e));
+			}
+		})();
 	}, []);
 
 	return (
